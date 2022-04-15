@@ -1,0 +1,7 @@
+#! /bin/sh
+qemu-system-arm \
+   	-M vexpress-a9 \
+   	-m 512M \
+	-kernel out/u-boot \
+	-serial stdio \
+	-sd out/sdcard.disk \

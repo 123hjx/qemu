@@ -1,0 +1,16 @@
+#! /bin/bash
+
+GDB_DEBUG=
+if [ $1 == "gdb" ];then
+	GDB_DEBUG="-s -S"
+fi
+
+qemu-system-arm \
+   	-M vexpress-a9 \
+   	-m 512M \
+	-kernel out/zImage \
+	-dtb out/vexpress-v2p-ca9.dtb \
+	-append "root=/dev/mmcblk0 rw rootfstype=ext4 init=init.sh console=ttyAMA0,115200 debug" \
+	-serial stdio \
+	-sd out/rootfs.bin \
+	$GDB_DEBUG
