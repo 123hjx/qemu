@@ -3,14 +3,14 @@
 - 下载地址：https://releases.linaro.org/components/toolchain/binaries/
 - 版本：gcc-linaro-11.2.1-2021.10-x86_64_arm-linux-gnueabihf
 - 配置：
-``` 下载并解压到 prebuilt 目录    -Jxvf
+  ``` 下载并解压到 prebuilt 目录    -Jxvf ```
 
 
 ## 2. 下载busybox
 - 下载地址：https://git.busybox.net/busybox/?h=1_34_stable
 - 版本：busybox-1_32_1.tar.bz2
 - 配置：
-``` 下载并解压到 prebuilt 目录    -jxvf
+``` 下载并解压到 prebuilt 目录    -jxvf```
  
 ## 3. 功能
 - 单运行 uboot
