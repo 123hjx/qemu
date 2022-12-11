@@ -14,7 +14,9 @@
  
 ## 3. 功能
 - 单运行 uboot
-  ```make uboot```
+  ```
+  make uboot
+  ```
 - 单运行 kernel
   ```
   make busybox
@@ -32,6 +34,10 @@
   make sdcard_disk
   ```
 - 编译kernel内部ko
-  ``` make modules ```
+  ```
+  make modules
+  ```
 - 编译定义ko
-  ``` make drivers ```
+  ``` 
+  make drivers 
+  ```
