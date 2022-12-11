@@ -1,38 +1,38 @@
-KERNEL_SOURCE :=linux-4.19.237
-UBOOT_SOURCE :=u-boot-2018.09
 DRIVERS_SOURCE :=drivers
 ROOTFS_DIR :=rootfs
 SDCARD_DIR :=sdcard
 PREBUILT :=prebuilt
-BUSYBOX_SOURCE :=$(PREBUILT)/busybox-1.30.1
 OUT :=out
+
+KERNEL_SOURCE :=linux-4.19.237
+UBOOT_SOURCE :=u-boot-2018.09
+BUSYBOX_SOURCE :=$(PREBUILT)/busybox-1_32_1
+GCC_DIR :=$(PWD)/$(PREBUILT)/gcc-linaro-11.2.1-2021.10-x86_64_arm-linux-gnueabihf
 
 MAKE :=make -j8
 export ARCH :=arm
-export CROSS_COMPILE :=arm-linux-gnueabihf-
+export CROSS_COMPILE :=$(GCC_DIR)/bin/arm-linux-gnueabihf-
 
 all: zImage rootfs_dir drivers sdcard_dir rootfs_bin sdcard_disk uboot
 
 $(OUT):
 	mkdir $@
 
-kernel_clean:
-	$(MAKE) mrproper -C $(KERNEL_SOURCE)
-
-kernel_config:
-	$(MAKE) vexpress_defconfig -C $(KERNEL_SOURCE)
+kernel: $(OUT) kernel_clean
+	$(MAKE) vexpress_defconfig -C $(KERNEL_SOURCE) # kernel_config
 #	$(MAKE) menuconfig -C $(KERNEL_SOURCE)
-
-zImage: kernel_config $(OUT)
 	$(MAKE) -C $(KERNEL_SOURCE) bzImage dtbs
 	cp $(KERNEL_SOURCE)/arch/arm/boot/zImage $(OUT)/
 	cp $(KERNEL_SOURCE)/arch/arm/boot/dts/vexpress-v2p-ca9.dtb $(OUT)/
+
+kernel_clean:
+	$(MAKE) mrproper -C $(KERNEL_SOURCE) # kernel_clean
 
 modules:
 	$(MAKE) -C $(KERNEL_SOURCE) modules
 
 .PHONY: drivers
-drivers:
+drivers: drivers_clean
 	$(MAKE) M=$(DRIVERS_SOURCE) -C $(KERNEL_SOURCE)
 	find $(DRIVERS_SOURCE) -name "*.ko" -exec cp \{\} $(ROOTFS_DIR)/home/ \;
 
@@ -45,16 +45,15 @@ drivers_clean:
 	find $(DRIVERS_SOURCE) -name "*.cmd" |xargs rm -f
 	find $(DRIVERS_SOURCE) -name "*.mod" |xargs rm -f
 
-uboot_clean:
-	$(MAKE) mrproper -C $(UBOOT_SOURCE)
 
-uboot_config:
+uboot: $(OUT) uboot_clean
 	$(MAKE) -C $(UBOOT_SOURCE) vexpress_ca9x4_defconfig
 #	$(MAKE) -C $(UBOOT_SOURCE) menuconfig
-
-uboot: $(OUT) uboot_config
 	$(MAKE) -C $(UBOOT_SOURCE)
 	cp $(UBOOT_SOURCE)/u-boot $(OUT)/
+
+uboot_clean:
+	$(MAKE) mrproper -C $(UBOOT_SOURCE)
 
 busybox:
 	$(MAKE) -C $(BUSYBOX_SOURCE) clean
