@@ -14,20 +14,24 @@
  
 ## 3. 功能
 - 单运行 uboot
-  make uboot
+  ```make uboot```
 - 单运行 kernel
+  ```
   make busybox
   make rootfs_dir
   make rootfs_bin
   make kernel
+  ```
 - uboot 启动 kernel
+  ```
   make uboot
   make busybox
   make rootfs_dir
   make kernel
   make sdcard_dir
   make sdcard_disk
+  ```
 - 编译kernel内部ko
-  make modules
+  ``` make modules ```
 - 编译定义ko
-  make drivers 
+  ``` make drivers ```
